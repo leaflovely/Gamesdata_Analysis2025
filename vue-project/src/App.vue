@@ -1,7 +1,7 @@
-<script setup></script>
-
+<!-- App.vue -->
 <template>
-  <router-view></router-view>
+  <div id="app">
+    <Header /> <!-- 你的Header组件 -->
+    <router-view></router-view> <!-- 路由出口 -->
+  </div>
 </template>
-
-<style scoped></style>

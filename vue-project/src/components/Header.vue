@@ -1,57 +1,90 @@
 <script setup>
-import icon1 from "../assets/20240829093757.png";
-import icon2 from "../assets/20231212032739.png";
 import Login from "./Login.vue";
 import Register from "./Register.vue";
 import { popStore } from "../store/pop";
 import { userStore } from "../store/user";
-import { useRoute } from "vue-router";
-import router from "../router";
+import { useRoute, useRouter } from "vue-router";
+import Search from "./Search.vue";
 
 const user = userStore();
 const pop = popStore();
-
-const location = useRoute();
+const route = useRoute();
+const router = useRouter();
 
 const nav_list = [
-  { name: "主页", url: "#", icon: "" },
-  { name: "可视化", url: "#", icon: "" },
-  { name: "全部游戏", url: "#", icon: "" },
-  { name: "探索队列", url: "#", icon: "" },
-  { name: "我的收藏", url: "#", icon: "" }
+  { name: "主页", path: "/", icon: "" },
+  { name: "可视化", path: "/visualization", icon: "" },
+  { name: "全部游戏", path: "/all-games", icon: "" },
+  { name: "探索队列", path: "/explore-queue", icon: "" },
+  { name: "我的评分", path: "/my-evaluate", icon: "" }
 ];
+
+const goToPublish = () => {
+  if (user.isLogin) {
+    router.push('/publish');
+  } else {
+    pop.changeLoginPop(true);
+  }
+};
 </script>
 
 <template>
   <div class="main-header">
     <div class="header-left">
-      <a class="header-icon" href="@/index.html">
+      <!-- 使用router-link替代a标签 -->
+      <router-link to="/" class="header-icon">
         <img src="/images/logo.png" width="100" />
-      </a>
-      <ul class="header-nav" v-if="!(location.path === '/publish')">
+      </router-link>
+      
+      <!-- 保持原有条件渲染逻辑 -->
+      <ul class="header-nav" v-if="!(route.path === '/publish')">
         <li v-for="item in nav_list" :key="item.name">
-          <img :src="item.icon" v-if="item.icon ? true : false" />
-          <a :href="item.url">{{ item.name }}</a>
+          <!-- 使用router-link实现SPA导航，但保持原有文字样式 -->
+          <router-link :to="item.path">
+            {{ item.name }}
+          </router-link>
         </li>
       </ul>
     </div>
+    
+    <Search />
+    
     <div class="header-user">
-      <!-- 已登录 -->
-      <el-dropdown placement="bottom-end" v-if="user.isLogin">
+      <!-- 已登录用户菜单 -->
+      <el-dropdown v-if="user.isLogin" placement="bottom-end">
         <span class="user-name">{{ user.username }}</span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item style="color: red" @click="() => user.logout()"
-              >退出登录</el-dropdown-item
+            <el-dropdown-item @click="router.push('/profile')">
+              <i class="el-icon-user"></i> 个人中心
+            </el-dropdown-item>
+            <el-dropdown-item @click="router.push('/settings')">
+              <i class="el-icon-setting"></i> 账户设置
+            </el-dropdown-item>
+            <el-dropdown-item @click="goToPublish">
+              <i class="el-icon-upload"></i> 发布内容
+            </el-dropdown-item>
+            <el-dropdown-item 
+              divided 
+              style="color: red" 
+              @click="user.logout()"
             >
+              <i class="el-icon-switch-button"></i> 退出登录
+            </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <!-- 未登录 -->
-      <el-button plain @click="() => pop.changeLoginPop()" v-else>
+      
+      <!-- 未登录状态 -->
+      <el-button 
+        v-else 
+        plain 
+        @click="pop.changeLoginPop(true)"
+      >
         登录
       </el-button>
     </div>
+    
     <Login />
     <Register />
   </div>
@@ -72,43 +105,36 @@ const nav_list = [
   display: flex;
   align-items: center;
   justify-content: space-between;
+  
   .header-left {
     display: flex;
     align-items: center;
-    .back {
-      margin-left: 30px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
-    .back :hover {
-      color: #409eff;
-    }
+    
     .header-icon {
-      float: left;
-      height: 100%;
-      overflow: hidden;
-      width: 130px;
+      display: block;
       height: 60px;
       img {
         height: 100%;
       }
     }
+    
+    /* 完全保持原有的导航链接CSS样式 */
     .header-nav {
       float: left;
       display: flex;
       line-height: 48px;
       font-size: 14px;
+      
       li {
         padding: 0 10px;
         display: flex;
         align-items: center;
-        img {
-          width: 20px;
-          height: 34px;
-        }
+        
         a {
+          /* 保持原有文字颜色 */
           color: black;
+          
+          /* 保持原有悬停效果 */
           &:hover {
             color: #fc5531;
           }
@@ -116,11 +142,12 @@ const nav_list = [
       }
     }
   }
+  
   .header-user {
-    float: right;
-    height: 100%;
     display: flex;
     align-items: center;
+    
+    /* 保持原有的用户名样式 */
     span.user-name {
       display: block;
       width: 32px;
@@ -131,18 +158,13 @@ const nav_list = [
       text-align: center;
       font-size: 14px;
     }
-    .plus-btn {
-      background-color: #fc5531;
-      width: 80px;
-      height: 32px;
-      color: white;
-      margin-left: 16px;
-      &:hover {
-        color: white;
-      }
-      border-radius: 14px;
-    }
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .header-nav {
+    display: none !important;
   }
 }
 </style>
-../store/user

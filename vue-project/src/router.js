@@ -7,6 +7,27 @@ const routes = [
   { path: "/", redirect: "/home" },
   { path: "/home", component: Home },
   { path: "/detail", component: GameDetail },
+  {
+    path: '/visualization',
+    name: 'Visualization',
+    component: () => import('./components/Visualization.vue')
+  },
+  {
+    path: '/all-games',
+    name: 'AllGames',
+    component: () => import('./components/AllGames.vue')
+  },
+  {
+    path: '/explore-queue',
+    name: 'ExploreQueue',
+    component: () => import('./components/ExploreQueue.vue')
+  },
+  {
+    path: '/my-evaluate',
+    name: 'MyEvaluate',
+    component: () => import('./components/MyEvaluate.vue'),
+    meta: { requiresAuth: true } // 需要登录的页面
+  }
 ];
 
 const router = createRouter({

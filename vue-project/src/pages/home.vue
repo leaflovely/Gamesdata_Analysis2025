@@ -4,7 +4,8 @@ import Search from "../components/Search.vue";
 import GameList from "../components/Game.vue";
 import OtherList from "../components/OtherList.vue";
 import { ref } from "vue";
-
+import CarouselWithDetail from '../components/CarouselWithDetail.vue'
+  
 const activeName = ref("second");
 </script>
 
@@ -13,10 +14,8 @@ const activeName = ref("second");
   <Header />
   <main>
     <div class="main-box">
-      
-      <div class="search-box">
-        <Search />
-      </div>
+      <CarouselWithDetail />
+      <!-- 其它组件 -->
     </div>
   </main>
 </template>
