@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'user',
-    'game',
-    'navigation'
+    'game'
 ]
 
 REST_FRAMEWORK = {
@@ -106,7 +105,7 @@ DATABASES = {
         # 数据库引擎
         'ENGINE': 'django.db.backends.mysql',
         # 数据库名字
-        'NAME': 'games',
+        'NAME': 'game',
         # 数据库用户名
         'USER': 'root',
         # 数据库密码

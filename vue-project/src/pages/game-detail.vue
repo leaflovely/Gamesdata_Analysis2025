@@ -4,14 +4,14 @@ import { useRoute } from "vue-router";
 import Header from "../components/Header.vue";
 import dayjs from "dayjs";
 
-const articleData = ref("");
+const gameData = ref("");
 
 const { query } = useRoute();
-const getArticleData = () => {
-  articleData.value = JSON.parse(query.data);
+const getGameData = () => {
+  gameData.value = JSON.parse(query.data);
 };
 
-getArticleData();
+getGameData();
 </script>
 
 <template>
@@ -19,27 +19,27 @@ getArticleData();
     <!-- 头部 -->
     <Header />
     <main>
-      <h1>{{ articleData.question }}</h1>
+      <h1>{{ gameData.question }}</h1>
       <div class="illustrate">
         <div class="top">
           <span class="first">原创</span>
-          <span>作者:{{ articleData.author }}</span>
+          <span>作者:{{ gameData.author }}</span>
           <span>
             <el-icon><Clock /></el-icon>
-            {{ dayjs(articleData.publish_time).format("YYYY-MM-DD HH:mm:ss") }}
+            {{ dayjs(gameData.publish_time).format("YYYY-MM-DD HH:mm:ss") }}
           </span>
           <span>
             <el-icon><ArrowUp /></el-icon>
-            点赞数{{ articleData.up }}
+            点赞数{{ gameData.up }}
           </span>
           <span>
             <el-icon><ArrowDown /></el-icon>
-            踩{{ articleData.down }}
+            踩{{ gameData.down }}
           </span>
         </div>
       </div>
       <div class="content">
-        <div v-html="articleData.answer" />
+        <div v-html="gameData.answer" />
       </div>
     </main>
   </div>

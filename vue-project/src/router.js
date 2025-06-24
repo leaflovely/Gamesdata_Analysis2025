@@ -1,20 +1,12 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "./pages/home.vue";
-import ArticleDetail from "./pages/article-detail.vue";
-import Publish from "./pages/article-publish.vue";
+import GameDetail from "./pages/game-detail.vue";
 import { ElMessage } from "element-plus";
 
 const routes = [
   { path: "/", redirect: "/home" },
   { path: "/home", component: Home },
-  { path: "/detail", component: ArticleDetail },
-  {
-    path: "/publish",
-    component: Publish,
-    meta: {
-      isAuth: true,
-    },
-  },
+  { path: "/detail", component: GameDetail },
 ];
 
 const router = createRouter({

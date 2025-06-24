@@ -1,20 +1,11 @@
 <script setup>
 import Header from "../components/Header.vue";
 import Search from "../components/Search.vue";
-import HomeNavigation from "../components/HomeNavigation.vue";
-import ArticleList from "../components/ArticleList.vue";
+import GameList from "../components/Game.vue";
 import OtherList from "../components/OtherList.vue";
 import { ref } from "vue";
 
 const activeName = ref("second");
-const tab_list = [
-  { name: "first", label: "关注", comp: OtherList },
-  { name: "second", label: "推荐", comp: ArticleList },
-  { name: "third", label: "资讯", comp: OtherList },
-  { name: "fourth", label: "热榜", comp: OtherList },
-  { name: "fifth", label: "自荐", comp: OtherList },
-  { name: "sixth", label: "动态", comp: OtherList },
-];
 </script>
 
 <template>
@@ -22,26 +13,10 @@ const tab_list = [
   <Header />
   <main>
     <div class="main-box">
-      <img src="https://front.cdn.xdclass.net/images/logo.webp" class="logo" />
-      <!-- 搜索框 -->
+      
       <div class="search-box">
         <Search />
       </div>
-      <!-- 分类导航 -->
-      <div style="margin-bottom: 30px">
-        <HomeNavigation />
-      </div>
-      <!-- 文章列表 -->
-      <el-tabs v-model="activeName" class="demo-tabs">
-        <el-tab-pane
-          v-for="item in tab_list"
-          :key="item.name"
-          :label="item.label"
-          :name="item.name"
-        >
-          <component :is="item.comp" :title="item.label" />
-        </el-tab-pane>
-      </el-tabs>
     </div>
   </main>
 </template>

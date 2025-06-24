@@ -1,15 +1,15 @@
 <script setup>
 import { ref } from "vue";
-import { searchArticle } from "../api/article";
-import { articleStore } from "../store/article";
+import { searchGame } from "../api/game";
+import { gameStore } from "../store/game";
 
 const inpValue = ref("");
-const article = articleStore();
+const game = gameStore();
 
-// 搜索文章
+// 搜索游戏
 const handleSearch = async () => {
-  const res = await searchArticle({ question: inpValue.value });
-  article.changeArticleData(res);
+  const res = await searchGame({ question: inpValue.value });
+  game.changeGameData(res);
 };
 </script>
 

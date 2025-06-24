@@ -13,23 +13,12 @@ class GetGameAPIView(APIView):
         return Response({'code': 200, 'data': serializer.data})
 
 
-# 搜索文章视图类
+# 搜索游戏视图类
 class SearchGameAPIView(APIView):
     def post(self, request):
-        print(request.data.get('question'))
+        print(request.data.get('name'))
         # 处理POST请求
-        game = Game.objects.filter(question__icontains=request.data.get('question'))
+        game = Game.objects.filter(name__icontains=request.data.get('name'))
         serializer = GameSerializer(game, many=True)
         return Response({'code': 200, "data": serializer.data})
 
-
-class PublishGameAPIView(APIView):
-    # 校验前端token是正确
-    permission_classes = [permissions.IsAuthenticated]
-    def post(self, request):
-        serializer=GameSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'code': 200, 'message':'发布成功'})
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

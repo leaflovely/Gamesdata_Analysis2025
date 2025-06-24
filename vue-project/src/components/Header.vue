@@ -14,15 +14,11 @@ const pop = popStore();
 const location = useRoute();
 
 const nav_list = [
-  { name: "博客", url: "#", icon: "" },
-  { name: "下载", url: "#", icon: "" },
-  { name: "学习", url: "#", icon: "" },
-  { name: "社区", url: "#", icon: "" },
-  { name: "知道", url: "#", icon: "" },
-  { name: "GitCode", url: "#", icon: icon1 },
-  { name: "InsCode", url: "#", icon: icon2 },
-  { name: "会议", url: "#", icon: "" },
-  { name: "学习", url: "#", icon: "" },
+  { name: "主页", url: "#", icon: "" },
+  { name: "可视化", url: "#", icon: "" },
+  { name: "全部游戏", url: "#", icon: "" },
+  { name: "探索队列", url: "#", icon: "" },
+  { name: "我的收藏", url: "#", icon: "" }
 ];
 </script>
 
@@ -30,7 +26,7 @@ const nav_list = [
   <div class="main-header">
     <div class="header-left">
       <a class="header-icon" href="@/index.html">
-        <img src="https://front.cdn.xdclass.net/images/logo.webp" alt="" />
+        <img src="/images/logo.png" width="100" />
       </a>
       <ul class="header-nav" v-if="!(location.path === '/publish')">
         <li v-for="item in nav_list" :key="item.name">
@@ -55,17 +51,6 @@ const nav_list = [
       <el-button plain @click="() => pop.changeLoginPop()" v-else>
         登录
       </el-button>
-
-      <el-button
-        class="plus-btn"
-        @click="() => router.push('/publish')"
-        v-if="!(location.path === '/publish')"
-      >
-        <el-icon>
-          <Plus />
-        </el-icon>
-        <span>发布</span>
-      </el-button>
     </div>
     <Login />
     <Register />
@@ -80,7 +65,7 @@ const nav_list = [
 
 .main-header {
   width: 100vw;
-  height: 48px;
+  height: 65px;
   padding: 0 24px;
   box-shadow: inset 0 -1px 2px #ccc;
   box-sizing: border-box;
