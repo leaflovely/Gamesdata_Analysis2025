@@ -1,6 +1,6 @@
 <template>
     <Header />
-    <div>3333</div>
+    <div>1</div>
 </template>
 
 <script setup>

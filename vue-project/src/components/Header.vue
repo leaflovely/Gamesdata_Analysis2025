@@ -4,7 +4,7 @@ import Register from "./Register.vue";
 import { popStore } from "../store/pop";
 import { userStore } from "../store/user";
 import { useRoute, useRouter } from "vue-router";
-import Search from "./Search.vue";
+import { computed } from "vue";
 
 const user = userStore();
 const pop = popStore();
@@ -12,11 +12,11 @@ const route = useRoute();
 const router = useRouter();
 
 const nav_list = [
-  { name: "主页", path: "/", icon: "" },
-  { name: "可视化", path: "/visualization", icon: "" },
-  { name: "全部游戏", path: "/all-games", icon: "" },
-  { name: "探索队列", path: "/explore-queue", icon: "" },
-  { name: "我的评分", path: "/my-evaluate", icon: "" }
+  { name: "主页", path: "/", icon: "el-icon-house" },
+  { name: "可视化", path: "/visualization", icon: "el-icon-data-analysis" },
+  { name: "全部游戏", path: "/all-games", icon: "el-icon-menu" },
+  { name: "探索队列", path: "/explore-queue", icon: "el-icon-search" },
+  { name: "我的评分", path: "/my-evaluate", icon: "el-icon-star-on" }
 ];
 
 const goToPublish = () => {
@@ -26,145 +26,195 @@ const goToPublish = () => {
     pop.changeLoginPop(true);
   }
 };
+
+const userMenu = computed(() => [
+  //{ label: "个人中心", icon: "el-icon-user", action: () => router.push('/profile') },
+  //{ label: "账户设置", icon: "el-icon-setting", action: () => router.push('/settings') },
+  //{ label: "发布内容", icon: "el-icon-upload", action: goToPublish },
+  { label: "退出登录", icon: "el-icon-switch-button", action: user.logout, danger: true }
+]);
 </script>
 
 <template>
-  <div class="main-header">
-    <div class="header-left">
-      <!-- 使用router-link替代a标签 -->
-      <router-link to="/" class="header-icon">
-        <img src="/images/logo.png" width="100" />
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <router-link to="/">
+        <div class="logo-circle">
+          <img src="/src/assets/logo.png" alt="logo" />
+        </div>
       </router-link>
-      
-      <!-- 保持原有条件渲染逻辑 -->
-      <ul class="header-nav" v-if="!(route.path === '/publish')">
-        <li v-for="item in nav_list" :key="item.name">
-          <!-- 使用router-link实现SPA导航，但保持原有文字样式 -->
-          <router-link :to="item.path">
-            {{ item.name }}
-          </router-link>
-        </li>
-      </ul>
     </div>
-    
-    <Search />
-    
-    <div class="header-user">
-      <!-- 已登录用户菜单 -->
-      <el-dropdown v-if="user.isLogin" placement="bottom-end">
-        <span class="user-name">{{ user.username }}</span>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item @click="router.push('/profile')">
-              <i class="el-icon-user"></i> 个人中心
-            </el-dropdown-item>
-            <el-dropdown-item @click="router.push('/settings')">
-              <i class="el-icon-setting"></i> 账户设置
-            </el-dropdown-item>
-            <el-dropdown-item @click="goToPublish">
-              <i class="el-icon-upload"></i> 发布内容
-            </el-dropdown-item>
-            <el-dropdown-item 
-              divided 
-              style="color: red" 
-              @click="user.logout()"
-            >
-              <i class="el-icon-switch-button"></i> 退出登录
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-      
-      <!-- 未登录状态 -->
-      <el-button 
-        v-else 
-        plain 
-        @click="pop.changeLoginPop(true)"
+    <div class="sidebar-nav">
+      <el-button
+        v-for="item in nav_list"
+        :key="item.name"
+        :type="route.path === item.path ? 'primary' : 'default'"
+        class="nav-btn"
+        @click="router.push(item.path)"
+        :icon="item.icon"
+        round
       >
-        登录
+        {{ item.name }}
       </el-button>
     </div>
-    
+    <div class="sidebar-user">
+      <template v-if="user.isLogin">
+        <el-dropdown placement="right-start">
+          <el-button class="user-btn" type="primary" round>
+            <i class="el-icon-user"></i>
+            {{ user.username }}
+          </el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item
+                v-for="menu in userMenu"
+                :key="menu.label"
+                :style="{ color: menu.danger ? 'red' : '' }"
+                @click="menu.action"
+              >
+                <i :class="menu.icon"></i> {{ menu.label }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </template>
+      <template v-else>
+        <el-button
+          type="primary"
+          class="nav-btn"
+          round
+          @click="pop.changeLoginPop(true)"
+        >
+          登录
+        </el-button>
+      </template>
+    </div>
     <Login />
     <Register />
   </div>
 </template>
 
 <style scoped lang="less">
-::v-deep(.el-dialog__header) {
+.sidebar-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 300px;
+  height: 100vh;
+  background: transparent;
+  //box-shadow: 2px 0 12px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 0 24px 0;
+  z-index: 100;
+  transition: width 0.2s;
+
+.sidebar-logo {
+  margin-bottom: 32px;
   display: flex;
   justify-content: center;
-}
-
-.main-header {
-  width: 100vw;
-  height: 65px;
-  padding: 0 24px;
-  box-shadow: inset 0 -1px 2px #ccc;
-  box-sizing: border-box;
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  
-  .header-left {
+  .logo-circle {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #d3ff87 0%, #8bcd17 100%);
+    border-radius: 50%;
     display: flex;
+    justify-content: center;
     align-items: center;
-    
-    .header-icon {
-      display: block;
+    box-shadow: 0 4px 16px #e8ffc0;
+    transition: box-shadow 0.2s;
+    &:hover {
+      box-shadow: 0 8px 24px #d3ff87;
+    }
+    img {
+      width: 60px;
       height: 60px;
-      img {
-        height: 100%;
-      }
-    }
-    
-    /* 完全保持原有的导航链接CSS样式 */
-    .header-nav {
-      float: left;
-      display: flex;
-      line-height: 48px;
-      font-size: 14px;
-      
-      li {
-        padding: 0 10px;
-        display: flex;
-        align-items: center;
-        
-        a {
-          /* 保持原有文字颜色 */
-          color: black;
-          
-          /* 保持原有悬停效果 */
-          &:hover {
-            color: #fc5531;
-          }
-        }
-      }
-    }
-  }
-  
-  .header-user {
-    display: flex;
-    align-items: center;
-    
-    /* 保持原有的用户名样式 */
-    span.user-name {
-      display: block;
-      width: 32px;
-      height: 32px;
-      border: 1px solid #ccc;
       border-radius: 50%;
-      line-height: 32px;
-      text-align: center;
-      font-size: 14px;
+      object-fit: cover;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
     }
   }
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .header-nav {
-    display: none !important;
+  .sidebar-nav {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+
+    .nav-btn {
+      width: 100%;
+      color: #fff;
+      //background: linear-gradient(90deg, #fc5531 0%, #fc8c31 100%);
+      border: none;
+      font-weight: 500;
+      border-radius: 8px;
+      height: 48px;
+      font-size: 40px;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px rgba(252,85,49,0.08);
+      transition: background 0.2s;
+      &:hover {
+        //background: linear-gradient(90deg, #fc8c31 0%, #fc5531 100%);
+        color: #9b6cfb;
+      }
+    }
+    .el-button--default {
+      margin-left: -40px; 
+      background: transparent;
+      color: #fff;
+      border: 0px solid #fff2;
+    }
+    .el-button--primary {
+      margin-left: -20px; 
+      background: transparent;
+      //background: linear-gradient(90deg, #fc5531 0%, #fc8c31 100%);
+      color: #9b6cfb;
+    }
+  }
+
+  .sidebar-user {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 24px;
+
+    .user-btn {
+      width: 80%;
+      color: #fff !important;
+      background: #081641 ;
+      border: 1px solid #fff2;
+      font-size: 20px;
+      margin-bottom: 100px;
+      &:hover {
+        background: #2fe4cc;
+        color: #fff;
+      }
+    }
+  }
+}
+
+/* 响应式收缩 */
+@media (max-width: 900px) {
+  .sidebar-header {
+    width: 64px;
+    padding: 16px 0;
+    .sidebar-logo img { width: 40px; }
+    .sidebar-nav .nav-btn,
+    .sidebar-user .user-btn {
+      width: 40px;
+      font-size: 0;
+      padding: 0;
+      justify-content: center;
+      i { font-size: 20px; }
+      span { display: none; }
+    }
   }
 }
 </style>
