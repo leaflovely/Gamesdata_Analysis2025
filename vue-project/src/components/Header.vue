@@ -156,6 +156,10 @@ const userMenu = computed(() => [
       border-radius: 8px;
       height: 48px;
       font-size: 40px;
+      text-shadow:
+      5px 5px 12px rgba(0,0,0,0.55),   // 主黑色阴影更深更大
+      0 6px 24px rgba(59,130,246,0.28), // 蓝色柔光更明显
+      2px 2px 0 #222;                   // 细实线阴影增强立体
       letter-spacing: 1px;
       box-shadow: 0 2px 8px rgba(252,85,49,0.08);
       transition: background 0.2s;

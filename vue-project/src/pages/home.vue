@@ -18,7 +18,7 @@ const activeName = ref("second");
     <div class="main-box">
       <Search />
       <div class="carousel-tip">
-        游戏推荐 ———来自我们编辑的精选游戏
+        游戏推荐 ———来自我们编辑的精选
       </div>
       <CarouselWithDetail />
 
@@ -58,6 +58,10 @@ main {
     text-align: left;
     letter-spacing: 1px;
     font-weight: 500;
+    text-shadow:
+      5px 5px 12px rgba(0,0,0,0.55),   // 主黑色阴影更深更大
+      0 6px 24px rgba(59,130,246,0.28), // 蓝色柔光更明显
+      2px 2px 0 #222;                   // 细实线阴影增强立体
   }
   .section-title {
     color: #fff;
