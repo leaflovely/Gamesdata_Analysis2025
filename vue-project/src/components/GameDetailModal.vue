@@ -89,17 +89,30 @@
               <h3>游戏简介</h3>
               <p>{{ game.information || '暂无游戏介绍' }}</p>
             </div>
+            <!-- 添加评分组件 -->
+            <StarRating 
+              v-if="game.id" 
+              :game-id="game.id" 
+              @rating-submitted="handleRatingSubmitted"
+            />
           </div>
         </div>
       </div>
     </transition>
   </teleport>
+
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { formatDate } from "../utils/dateFormatter";
+import StarRating from './StarRating.vue';
 
+// 在现有代码中添加处理评分提交的方法
+const handleRatingSubmitted = () => {
+  // 这里可以添加更新界面或其他操作
+  console.log('评分已提交');
+};
 const props = defineProps({
   game: {
     type: Object,

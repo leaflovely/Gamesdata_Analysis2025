@@ -56,11 +56,13 @@ class Game(models.Model):
     genres = models.TextField(verbose_name="游戏类型")  # 多类型用文本存储（如"Open-World, Action"）[6](@ref)
     image_url = models.TextField(verbose_name="图片链接")
     information = models.TextField(verbose_name='游戏简介')
-    review_user = models.TextField(verbose_name="评价用户",
-        blank=True,  # 允许空值
-        null=True,  # 数据库允许NULL
-        default="[]"  # 默认值设为空JSON数组
-    )  #评价了该游戏的用户，数据样式如下数据用户id:评分
+    # 修改review_user字段
+    review_user = models.TextField(
+        verbose_name="评价用户",
+        blank=True,
+        null=True,
+        default="{}"  # 默认值设为空JSON对象
+    )
     chinese_name = models.CharField(max_length=120,null=True, blank=True,verbose_name="中文名")
     class Meta:
         verbose_name = "游戏"  # 后台显示名称[7](@ref)

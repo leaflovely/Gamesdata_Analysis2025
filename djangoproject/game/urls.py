@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import GetGameAPIView, SearchGameAPIView
+from .views import GetGameAPIView, SearchGameAPIView,RatingAPIView
 
 app_name = 'Game'
 
 urlpatterns = [
     path('get', GetGameAPIView.as_view(), name='get_Game'),
     path('search', SearchGameAPIView.as_view(), name='search_Game'),
+    path('rating', RatingAPIView.as_view(), name='rating_Game'),
 ]

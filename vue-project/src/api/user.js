@@ -13,3 +13,7 @@ export const getRegister = (data) => {
 export const getLogin = (data) => {
   return request({ method: "post", url: "/user/login", data });
 };
+
+export const sendRating = (data) => {
+  return request({ method: "post", url: "/game/rating", data });
+};
