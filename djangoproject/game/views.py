@@ -15,6 +15,6 @@ class GetGameAPIView(APIView):
 
 class SearchGameAPIView(APIView):
     def post(self, request):
-        game = Article.objects.filter(name__icontains=request.data['question'])
-        serializer = ArticleSerializer(game, many=True)
+        game = Game.objects.filter(chinese_name__icontains=request.data['question'])
+        serializer = GameSerializer(game, many=True)
         return Response({'code': 200, 'data': serializer.data})

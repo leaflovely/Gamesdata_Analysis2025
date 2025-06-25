@@ -1,12 +1,10 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "./pages/home.vue";
-import GameDetail from "./pages/game-detail.vue";
 import { ElMessage } from "element-plus";
 
 const routes = [
   { path: "/", redirect: "/home" },
   { path: "/home", component: Home },
-  { path: "/detail", component: GameDetail },
   {
     path: '/visualization',
     name: 'Visualization',

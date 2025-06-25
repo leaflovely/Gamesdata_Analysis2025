@@ -5,6 +5,7 @@ import { getGame } from "../api/game";
 import { gameStore } from "../store/game";
 import { formatDate } from "../utils/dateFormatter";
 import Header from "../components/Header.vue";
+import GameDetailModal from "../components/GameDetailModal.vue"; // 引入详情弹窗组件
 
 const router = useRouter();
 const game = gameStore();
@@ -12,9 +13,13 @@ const currentPage = ref(1);
 const pageSize = 24;
 const defaultImage = "https://via.placeholder.com/150?text=Game+Image";
 
+// 详情弹窗控制状态
+const detailVisible = ref(false);
+const selectedGame = ref(null);
+
 // 筛选相关状态
 const platforms = ref(['全部', 'nintendo', 'playstation', 'pc', 'wii', 'xbox']);
-const genres = ref(['全部', 'Open-World', 'Action', '3D', 'Fighting', 'Platformer']);
+const genres = ref(['全部', 'Open-World', 'Action', 'Adventure', '3D', 'Fighting', 'Platformer']);
 const selectedPlatforms = ref([]);
 const selectedGenres = ref([]);
 const appliedFilters = ref({ platforms: [], genres: [] });
@@ -40,7 +45,6 @@ const togglePlatform = (platform) => {
     } else {
       selectedPlatforms.value.splice(index, 1);
     }
-    // 如果选择了具体平台，则移除"全部"选项
     if (selectedPlatforms.value.length > 0) {
       const allIndex = selectedPlatforms.value.indexOf('全部');
       if (allIndex !== -1) {
@@ -61,7 +65,6 @@ const toggleGenre = (genre) => {
     } else {
       selectedGenres.value.splice(index, 1);
     }
-    // 如果选择了具体类型，则移除"全部"选项
     if (selectedGenres.value.length > 0) {
       const allIndex = selectedGenres.value.indexOf('全部');
       if (allIndex !== -1) {
@@ -77,7 +80,7 @@ const applyFilters = () => {
     platforms: [...selectedPlatforms.value],
     genres: [...selectedGenres.value]
   };
-  currentPage.value = 1; // 重置到第一页
+  currentPage.value = 1;
 };
 
 // 重置筛选条件
@@ -91,20 +94,20 @@ const resetFilters = () => {
 // 筛选游戏数据
 const filteredGames = computed(() => {
   return game.gameData.filter(game => {
-    // 平台筛选
+    // 平台筛选（包含匹配）
     if (appliedFilters.value.platforms.length > 0) {
-      const gamePlatforms = game.platform.toLowerCase().split(',').map(p => p.trim());
+      const gamePlatform = game.platform.toLowerCase();
       const hasPlatform = appliedFilters.value.platforms.some(platform => 
-        gamePlatforms.includes(platform.toLowerCase())
+        gamePlatform.includes(platform.toLowerCase())
       );
       if (!hasPlatform) return false;
     }
     
-    // 游戏类型筛选
+    // 修改后的游戏类型筛选逻辑
     if (appliedFilters.value.genres.length > 0) {
-      const gameGenres = game.game_type.split(',').map(g => g.trim());
+      const gameGenres = game.genres.toLowerCase().replace(/-/g, ' '); // 将连字符转为空格
       const hasGenre = appliedFilters.value.genres.some(genre => 
-        gameGenres.includes(genre)
+        gameGenres.includes(genre.toLowerCase().replace(/-/g, ' '))
       );
       if (!hasGenre) return false;
     }
@@ -135,12 +138,15 @@ const handleImageError = (event) => {
   event.target.src = defaultImage;
 };
 
-// 跳转详情页
-const goDetail = (game) => {
-  router.push({
-    path: "/detail",
-    query: { id: game.id },
-  });
+// 打开详情弹窗
+const openDetail = (game) => {
+  selectedGame.value = game;
+  detailVisible.value = true;
+};
+
+// 关闭详情弹窗
+const closeDetail = () => {
+  detailVisible.value = false;
 };
 
 onMounted(() => {
@@ -193,16 +199,15 @@ onMounted(() => {
         v-for="game in paginatedGames"
         :key="game.id"
         class="game-card"
-        @click="goDetail(game)"
+        @click="openDetail(game)"
       >
-      <div class="card-left">
-          <!-- 动态绑定图片src属性[1,2,3](@ref) -->
+        <div class="card-left">
           <img 
             :src="game.image_url || defaultImage" 
             :alt="game.chinese_name || game.name"
             @error="handleImageError"
           />
-      </div>
+        </div>
         <div class="card-right">
           <h3 class="game-title">
             {{ game.chinese_name || game.name }}
@@ -250,6 +255,13 @@ onMounted(() => {
         下一页
       </button>
     </div>
+    
+    <!-- 游戏详情弹窗组件 -->
+    <GameDetailModal 
+      :game="selectedGame" 
+      :visible="detailVisible"
+      @close="closeDetail"
+    />
   </div>
 </template>
 
