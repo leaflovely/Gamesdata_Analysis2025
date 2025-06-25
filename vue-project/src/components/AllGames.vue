@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import { getGame } from "../api/game";
 import { gameStore } from "../store/game";
 import { formatDate } from "../utils/dateFormatter";
+import Search from "./Search.vue";
 import Header from "../components/Header.vue";
 import GameDetailModal from "../components/GameDetailModal.vue"; // 引入详情弹窗组件
 
@@ -158,6 +159,7 @@ onMounted(() => {
   <Header />
   <div class="game-list">
     <!-- 筛选区域 -->
+    <Search class="search-bar" />
     <div class="filter-section">
       <div class="filter-group">
         <h3>平台</h3>
@@ -270,6 +272,11 @@ onMounted(() => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  margin-left: 400px;
+}
+
+.search-bar {
+  margin-bottom: 24px;
 }
 
 /* 筛选区域样式 */

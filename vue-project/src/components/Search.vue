@@ -46,6 +46,7 @@ const handleSearch = async () => {
 
 
 <style lang="less" scoped>
+
 .modern-search {
   width: 97%;
   display: flex;
@@ -57,6 +58,8 @@ const handleSearch = async () => {
   box-shadow:
     0 8px 32px 0 rgba(8, 22, 65, 0.28),  /* 主阴影，模糊更大更深 */
     0 1.5px 6px 0 rgba(0,0,0,0.12);      /* 轻微叠加柔化 */
+  //margin-top: 30px;   // 距离页面顶部32px，可根据需要调整
+  //margin-left: 0px;
 }
 
 .search-logo {
