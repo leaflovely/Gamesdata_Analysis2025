@@ -54,7 +54,7 @@ class Game(models.Model):
     developer = models.CharField(max_length=100, blank=True, verbose_name="开发商")  # 允许为空[8](@ref)
     publisher = models.CharField(max_length=100, blank=True, verbose_name="发行商")
     genres = models.TextField(verbose_name="游戏类型")  # 多类型用文本存储（如"Open-World, Action"）[6](@ref)
-    image_url = models.CharField(max_length=120, verbose_name="图片链接")
+    image_url = models.TextField(verbose_name="图片链接")
     information = models.TextField(verbose_name='游戏简介')
     review_user = models.TextField(verbose_name="评价用户",
         blank=True,  # 允许空值

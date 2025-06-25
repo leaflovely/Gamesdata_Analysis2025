@@ -13,12 +13,8 @@ class GetGameAPIView(APIView):
         return Response({'code': 200, 'data': serializer.data})
 
 
-# 搜索游戏视图类
 class SearchGameAPIView(APIView):
     def post(self, request):
-        print(request.data.get('name'))
-        # 处理POST请求
-        game = Game.objects.filter(name__icontains=request.data.get('name'))
-        serializer = GameSerializer(game, many=True)
-        return Response({'code': 200, "data": serializer.data})
-
+        game = Article.objects.filter(name__icontains=request.data['question'])
+        serializer = ArticleSerializer(game, many=True)
+        return Response({'code': 200, 'data': serializer.data})

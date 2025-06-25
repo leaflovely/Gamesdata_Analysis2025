@@ -186,7 +186,7 @@
   .image-container {
     position: relative;
     height: 0;
-    padding-top: 40%; /* 根据图片比例调整 */
+    padding-top: 60%; /* 根据图片比例调整 */
     background-color: #f8f8f8;
   }
   
