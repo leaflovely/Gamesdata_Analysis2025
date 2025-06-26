@@ -54,8 +54,14 @@ export default {
         },
         legend: {
           orient: 'vertical',
-          right: 0,
-          top: 70,
+            right: '3%', // 紧贴饼图右侧，可根据需要微调
+          top: 45,
+          //放大标签
+          textStyle: {
+            fontSize: 14
+          },
+          itemWidth: 30,
+          itemHeight: 20,
           data: topGenres.map(item => item.name)
         },
         series: [

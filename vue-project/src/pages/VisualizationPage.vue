@@ -9,6 +9,7 @@ import ReleaseTrend from '../components/ReleaseTrend.vue';
 import GameTypeDistribution from '../components/GameTypeDistribution.vue';
 import DeveloperPublisherStats from '../components/DeveloperPublisherStats.vue';
 import DeveloperScoreStability from '../components/DeveloperScoreStability.vue';
+import WordCloud from '../components/WordCloud.vue';
 import Header from "../components/Header.vue";
 
 export default {
@@ -21,6 +22,7 @@ export default {
     GameTypeDistribution,
     DeveloperPublisherStats,
     DeveloperScoreStability,
+    WordCloud,
     Header
   },
   setup() {
@@ -153,9 +155,10 @@ export default {
         >全部</button>
       </div>
       <div class="visualization-grid">
-      <ReleaseTrend :gameData="filteredPublisherData" /> 
-      <GameTypeDistribution :gameData="filteredPublisherData" />
-    </div>
+        <ReleaseTrend :gameData="filteredPublisherData" /> 
+        <GameTypeDistribution :gameData="filteredPublisherData" />
+      </div>
+      <WordCloud :gameData="filteredPublisherData" />
   </div>
 </template>
 
