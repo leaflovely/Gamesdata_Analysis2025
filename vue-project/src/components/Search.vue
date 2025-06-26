@@ -15,13 +15,6 @@ const handleSearch = async () => {
 
 <template>
   <div class="modern-search">
-    <div class="search-logo">
-      <img
-        :src="logo"
-        alt="logo"
-        style="width: 48px; height: 48px; border-radius: 50%">
-      <span class="logo-text">专业的游戏评分网站</span>
-    </div>
     <div class="search-group">
       <el-input
         v-model="inpValue"

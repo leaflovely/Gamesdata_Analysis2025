@@ -28,9 +28,6 @@ const goToPublish = () => {
 };
 
 const userMenu = computed(() => [
-  //{ label: "个人中心", icon: "el-icon-user", action: () => router.push('/profile') },
-  //{ label: "账户设置", icon: "el-icon-setting", action: () => router.push('/settings') },
-  //{ label: "发布内容", icon: "el-icon-upload", action: goToPublish },
   { label: "退出登录", icon: "el-icon-switch-button", action: user.logout, danger: true }
 ]);
 </script>
@@ -43,6 +40,7 @@ const userMenu = computed(() => [
           <img src="/src/assets/logo.png" alt="logo" />
         </div>
       </router-link>
+      <span class="logo-text">专业的游戏评分网站</span>
     </div>
     <div class="sidebar-nav">
       <el-button
@@ -102,7 +100,6 @@ const userMenu = computed(() => [
   width: 300px;
   height: 100vh;
   background: transparent;
-  //box-shadow: 2px 0 12px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -110,34 +107,49 @@ const userMenu = computed(() => [
   z-index: 100;
   transition: width 0.2s;
 
-.sidebar-logo {
-  margin-bottom: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .logo-circle {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, #d3ff87 0%, #8bcd17 100%);
-    border-radius: 50%;
+  .sidebar-logo {
     display: flex;
-    justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 16px #e8ffc0;
-    transition: box-shadow 0.2s;
-    &:hover {
-      box-shadow: 0 8px 24px #d3ff87;
-    }
-    img {
-      width: 60px;
-      height: 60px;
+    margin-bottom: 32px;
+    .logo-circle {
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
-      object-fit: cover;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      background: transparent; 
+      animation: pulse 2s infinite ease-in-out;
+      img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+        position: relative;
+        z-index: 1; 
+      }
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        box-shadow: 0 0 30px rgba(140, 205, 23, 0.4); 
+        opacity: 0.6;
+        animation: pulseInner 2s infinite ease-in-out;
+      }
+    }
+    .logo-text {
+      color: white;
+      font-size: 20px;
+      margin-left: 10px;
+      font-family: 'Orbitron', sans-serif; 
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
     }
   }
-}
 
   .sidebar-nav {
     flex: 1;
@@ -150,21 +162,19 @@ const userMenu = computed(() => [
     .nav-btn {
       width: 100%;
       color: #fff;
-      //background: linear-gradient(90deg, #fc5531 0%, #fc8c31 100%);
       border: none;
       font-weight: 500;
       border-radius: 8px;
       height: 48px;
       font-size: 40px;
       text-shadow:
-      5px 5px 12px rgba(0,0,0,0.55),   // 主黑色阴影更深更大
-      0 6px 24px rgba(59,130,246,0.28), // 蓝色柔光更明显
-      2px 2px 0 #222;                   // 细实线阴影增强立体
+        5px 5px 12px rgba(0, 0, 0, 0.55),
+        0 6px 24px rgba(59, 130, 246, 0.28),
+        2px 2px 0 #222;
       letter-spacing: 1px;
-      box-shadow: 0 2px 8px rgba(252,85,49,0.08);
+      box-shadow: 0 2px 8px rgba(252, 85, 49, 0.08);
       transition: background 0.2s;
       &:hover {
-        //background: linear-gradient(90deg, #fc8c31 0%, #fc5531 100%);
         color: #9b6cfb;
       }
     }
@@ -177,7 +187,6 @@ const userMenu = computed(() => [
     .el-button--primary {
       margin-left: -20px; 
       background: transparent;
-      //background: linear-gradient(90deg, #fc5531 0%, #fc8c31 100%);
       color: #9b6cfb;
     }
   }
@@ -204,12 +213,14 @@ const userMenu = computed(() => [
   }
 }
 
-/* 响应式收缩 */
 @media (max-width: 900px) {
   .sidebar-header {
     width: 64px;
     padding: 16px 0;
     .sidebar-logo img { width: 40px; }
+    .sidebar-logo .logo-text {
+      display: none;
+    }
     .sidebar-nav .nav-btn,
     .sidebar-user .user-btn {
       width: 40px;
@@ -219,6 +230,33 @@ const userMenu = computed(() => [
       i { font-size: 20px; }
       span { display: none; }
     }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseInner {
+  0% {
+    box-shadow: 0 0 20px rgba(140, 205, 23, 0.6);
+    opacity: 0.6;
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(140, 205, 23, 0.8);
+    opacity: 1;
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(140, 205, 23, 0.6);
+    opacity: 0.6;
   }
 }
 </style>
