@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { getGame } from "../api/game";
+import { getGameByPage } from "../api/game"; // 修改为分页获取游戏数据的 API
 import { gameStore } from "../store/game";
 import { formatDate } from "../utils/dateFormatter";
 import Search from "./Search.vue";
@@ -11,126 +11,27 @@ import GameDetailModal from "../components/GameDetailModal.vue"; // 引入详情
 const router = useRouter();
 const game = gameStore();
 const currentPage = ref(1);
-const pageSize = 24;
-const defaultImage = "https://via.placeholder.com/150?text=Game+Image";
+const pageSize = 24; // 每页24张卡片
+const defaultImage = "https://via.placeholder.com/150?text=Game+Image"; // 默认占位图
 
 // 详情弹窗控制状态
 const detailVisible = ref(false);
 const selectedGame = ref(null);
 
-// 筛选相关状态
-const platforms = ref(['全部', 'nintendo', 'playstation', 'pc', 'wii', 'xbox']);
-const genres = ref(['全部', 'Open-World', 'Action', 'Adventure', '3D', 'Fighting', 'Platformer']);
-const selectedPlatforms = ref([]);
-const selectedGenres = ref([]);
-const appliedFilters = ref({ platforms: [], genres: [] });
-
-// 获取游戏数据
-const getGameData = async () => {
+// 获取游戏数据（分页）
+const getGameData = async (page) => {
   try {
-    const res = await getGame();
+    const res = await getGameByPage(page, pageSize); // 调用分页 API
     game.changeGameData(res);
   } catch (error) {
     console.error("获取游戏数据失败:", error);
   }
 };
 
-// 处理平台选择
-const togglePlatform = (platform) => {
-  if (platform === '全部') {
-    selectedPlatforms.value = [];
-  } else {
-    const index = selectedPlatforms.value.indexOf(platform);
-    if (index === -1) {
-      selectedPlatforms.value.push(platform);
-    } else {
-      selectedPlatforms.value.splice(index, 1);
-    }
-    if (selectedPlatforms.value.length > 0) {
-      const allIndex = selectedPlatforms.value.indexOf('全部');
-      if (allIndex !== -1) {
-        selectedPlatforms.value.splice(allIndex, 1);
-      }
-    }
-  }
-};
-
-// 处理游戏类型选择
-const toggleGenre = (genre) => {
-  if (genre === '全部') {
-    selectedGenres.value = [];
-  } else {
-    const index = selectedGenres.value.indexOf(genre);
-    if (index === -1) {
-      selectedGenres.value.push(genre);
-    } else {
-      selectedGenres.value.splice(index, 1);
-    }
-    if (selectedGenres.value.length > 0) {
-      const allIndex = selectedGenres.value.indexOf('全部');
-      if (allIndex !== -1) {
-        selectedGenres.value.splice(allIndex, 1);
-      }
-    }
-  }
-};
-
-// 应用筛选条件
-const applyFilters = () => {
-  appliedFilters.value = {
-    platforms: [...selectedPlatforms.value],
-    genres: [...selectedGenres.value]
-  };
-  currentPage.value = 1;
-};
-
-// 重置筛选条件
-const resetFilters = () => {
-  selectedPlatforms.value = [];
-  selectedGenres.value = [];
-  appliedFilters.value = { platforms: [], genres: [] };
-  currentPage.value = 1;
-};
-
-// 筛选游戏数据
-const filteredGames = computed(() => {
-  return game.gameData.filter(game => {
-    // 平台筛选（包含匹配）
-    if (appliedFilters.value.platforms.length > 0) {
-      const gamePlatform = game.platform.toLowerCase();
-      const hasPlatform = appliedFilters.value.platforms.some(platform => 
-        gamePlatform.includes(platform.toLowerCase())
-      );
-      if (!hasPlatform) return false;
-    }
-    
-    // 修改后的游戏类型筛选逻辑
-    if (appliedFilters.value.genres.length > 0) {
-      const gameGenres = game.genres.toLowerCase().replace(/-/g, ' '); // 将连字符转为空格
-      const hasGenre = appliedFilters.value.genres.some(genre => 
-        gameGenres.includes(genre.toLowerCase().replace(/-/g, ' '))
-      );
-      if (!hasGenre) return false;
-    }
-    
-    return true;
-  });
-});
-
-// 计算当前页显示的游戏
-const paginatedGames = computed(() => {
-  const startIndex = (currentPage.value - 1) * pageSize;
-  return filteredGames.value.slice(startIndex, startIndex + pageSize);
-});
-
-// 计算总页数
-const totalPages = computed(() => {
-  return Math.ceil(filteredGames.value.length / pageSize);
-});
-
 // 处理分页变化
 const handlePageChange = (page) => {
   currentPage.value = page;
+  getGameData(page); // 根据当前页获取数据
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
@@ -151,7 +52,7 @@ const closeDetail = () => {
 };
 
 onMounted(() => {
-  getGameData();
+  getGameData(currentPage.value); // 初次加载时获取第一页数据
 });
 </script>
 
@@ -164,51 +65,36 @@ onMounted(() => {
       <div class="filter-group">
         <h3>平台</h3>
         <div class="filter-tags">
-          <span 
-            v-for="platform in platforms" 
-            :key="platform"
+          <span v-for="platform in platforms" :key="platform"
             :class="{ 'filter-tag': true, 'active': platform === '全部' ? selectedPlatforms.length === 0 : selectedPlatforms.includes(platform) }"
-            @click="togglePlatform(platform)"
-          >
+            @click="togglePlatform(platform)">
             {{ platform }}
           </span>
         </div>
       </div>
-      
+
       <div class="filter-group">
         <h3>游戏类型</h3>
         <div class="filter-tags">
-          <span 
-            v-for="genre in genres" 
-            :key="genre"
+          <span v-for="genre in genres" :key="genre"
             :class="{ 'filter-tag': true, 'active': genre === '全部' ? selectedGenres.length === 0 : selectedGenres.includes(genre) }"
-            @click="toggleGenre(genre)"
-          >
+            @click="toggleGenre(genre)">
             {{ genre }}
           </span>
         </div>
       </div>
-      
+
       <div class="filter-actions">
         <button class="filter-button" @click="applyFilters">查询</button>
         <button class="filter-button reset" @click="resetFilters">重置</button>
       </div>
     </div>
-    
+
     <!-- 游戏列表 -->
     <div class="game-grid">
-      <div
-        v-for="game in paginatedGames"
-        :key="game.id"
-        class="game-card"
-        @click="openDetail(game)"
-      >
+      <div v-for="game in game.gameData" :key="game.id" class="game-card" @click="openDetail(game)">
         <div class="card-left">
-          <img 
-            :src="game.image_url || defaultImage" 
-            :alt="game.chinese_name || game.name"
-            @error="handleImageError"
-          />
+          <img :src="game.image_url || defaultImage" :alt="game.chinese_name || game.name" @error="handleImageError" />
         </div>
         <div class="card-right">
           <h3 class="game-title">
@@ -231,39 +117,25 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    
-    <div v-if="filteredGames.length === 0" class="no-results">
-      <p>没有找到匹配的游戏</p>
-    </div>
-    
-    <div class="pagination" v-if="totalPages > 1">
-      <button 
-        @click="handlePageChange(currentPage - 1)" 
-        :disabled="currentPage === 1"
-        class="pagination-button"
-      >
+
+    <div class="pagination">
+      <button @click="handlePageChange(currentPage - 1)" :disabled="currentPage === 1" class="pagination-button">
         上一页
       </button>
-      
+
       <span class="page-info">
-        第 {{ currentPage }} 页 / 共 {{ totalPages }} 页
+        第 {{ currentPage }} 页
       </span>
-      
-      <button 
-        @click="handlePageChange(currentPage + 1)" 
-        :disabled="currentPage === totalPages"
-        class="pagination-button"
-      >
+      <span class="page-info">
+        共548页
+      </span>
+      <button @click="handlePageChange(currentPage + 1)" class="pagination-button">
         下一页
       </button>
     </div>
-    
+
     <!-- 游戏详情弹窗组件 -->
-    <GameDetailModal 
-      :game="selectedGame" 
-      :visible="detailVisible"
-      @close="closeDetail"
-    />
+    <GameDetailModal :game="selectedGame" :visible="detailVisible" @close="closeDetail" />
   </div>
 </template>
 
@@ -505,11 +377,11 @@ onMounted(() => {
   .game-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .filter-tags {
     gap: 8px;
   }
-  
+
   .filter-tag {
     padding: 6px 12px;
     font-size: 13px;
@@ -520,11 +392,11 @@ onMounted(() => {
   .game-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .filter-tags {
     gap: 6px;
   }
-  
+
   .filter-tag {
     padding: 5px 10px;
     font-size: 12px;

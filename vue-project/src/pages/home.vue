@@ -2,7 +2,6 @@
 import Header from "../components/Header.vue";
 import Search from "../components/Search.vue";
 //import ExploreLite from "../components/ExploreLite.vue"; 
-import GameList from "../components/Game.vue";
 import OtherList from "../components/OtherList.vue";
 import { ref } from "vue";
 import CarouselWithDetail from '../components/CarouselWithDetail.vue'
@@ -27,20 +26,32 @@ const activeName = ref("second");
   </main>
 </template>
 
-
 <style lang="less">
 body {
   min-height: 100vh;
-  background: linear-gradient(150deg, #0b508d 0%, #081641 100%);
-  /* 你可以根据需要调整渐变角度和颜色 */
+  /* 动态背景渐变 */
+  background: linear-gradient(135deg, #d403e1 0%, #00465a 30%, #2360b3 70%, #460071 100%);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
 }
-</style>
 
-<style lang="less" scoped>
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .custom-gap {
   height: 32px;
-  background:transparent;
+  background: transparent;
 }
+
 main {
   background-color: transparent;
   overflow: hidden;

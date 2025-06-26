@@ -46,9 +46,15 @@ class RatingAPIView(APIView):
 
 class GetGameAPIView(APIView):
     def get(self, request):
-        # 处理GET请求
-        game = Game.objects.all()  # queryset数据类型转成JSON数据类型
-        serializer = GameSerializer(game, many=True)
+        # 获取页码参数，默认为第一页
+        page = int(request.query_params.get('page', 1))
+        page_size = 24  # 每页返回24条数据
+        offset = (page - 1) * page_size
+        limit = offset + page_size
+
+        # 查询数据库并分页
+        games = Game.objects.all()[offset:limit]
+        serializer = GameSerializer(games, many=True)
         return Response({'code': 200, 'data': serializer.data})
 
 
