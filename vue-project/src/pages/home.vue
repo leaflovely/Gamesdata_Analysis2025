@@ -2,7 +2,6 @@
 import Header from "../components/Header.vue";
 import Search from "../components/Search.vue";
 //import ExploreLite from "../components/ExploreLite.vue"; 
-import GameList from "../components/Game.vue";
 import OtherList from "../components/OtherList.vue";
 import { ref } from "vue";
 import CarouselWithDetail from '../components/CarouselWithDetail.vue'
