@@ -14,6 +14,67 @@ const currentPage = ref(1);
 const pageSize = 24; // 每页24张卡片
 const defaultImage = "https://via.placeholder.com/150?text=Game+Image"; // 默认占位图
 
+// 平台和类型选项
+const platforms = ref(['全部', 'nintendo', 'playstation', 'pc', 'wii', 'xbox']);
+const genres = ref(['全部', 'Open-World', 'Action', 'Adventure', '3D', 'Fighting', 'Platformer']);
+const selectedPlatforms = ref([]);
+const selectedGenres = ref([]);
+
+// 处理平台选择
+const togglePlatform = (platform) => {
+  if (platform === '全部') {
+    selectedPlatforms.value = [];
+    return;
+  }
+  const index = selectedPlatforms.value.indexOf(platform);
+  if (index > -1) {
+    selectedPlatforms.value.splice(index, 1);
+  } else {
+    selectedPlatforms.value.push(platform);
+  }
+};
+
+// 处理游戏类型选择
+const toggleGenre = (genre) => {
+  if (genre === '全部') {
+    selectedGenres.value = [];
+    return;
+  }
+  const index = selectedGenres.value.indexOf(genre);
+  if (index > -1) {
+    selectedGenres.value.splice(index, 1);
+  } else {
+    selectedGenres.value.push(genre);
+  }
+};
+
+// 应用筛选
+const applyFilters = async () => {
+  try {
+    const filters = {
+      platforms: selectedPlatforms.value,
+      genres: selectedGenres.value,
+      page: currentPage.value,
+      pageSize
+    };
+    // 直接使用game store实例调用filterGames方法
+    const res = await game.filterGames(filters);
+    if (res) {
+      currentPage.value = 1; // 重置页码
+      console.log('筛选结果:', res); // 添加日志便于调试
+    }
+  } catch (error) {
+    console.error('筛选游戏失败:', error);
+  }
+};
+
+// 重置筛选
+const resetFilters = () => {
+  selectedPlatforms.value = [];
+  selectedGenres.value = [];
+  getGameData(1);
+};
+
 // 详情弹窗控制状态
 const detailVisible = ref(false);
 const selectedGame = ref(null);

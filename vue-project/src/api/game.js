@@ -24,3 +24,19 @@ export const getGameByPage = async (page, pageSize) => {
   return request({ method: "get", url: `/game/get?page=${page}&pageSize=${pageSize}` });
 };
 
+/**
+ * 游戏筛选接口
+ * @param {Object} filters 筛选条件
+ * @returns {Promise<Array>} 筛选后的游戏数据
+ */
+export const filterGames = async (filters) => {
+  console.log('发送筛选请求，参数:', filters); // 添加请求日志
+  const response = await request({
+    method: "post",
+    url: "/game/filter",
+    data: filters,
+  });
+  console.log('收到筛选响应:', response); // 添加响应日志
+  return response;
+};
+
