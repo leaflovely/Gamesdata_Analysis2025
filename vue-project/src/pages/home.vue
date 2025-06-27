@@ -2,6 +2,7 @@
 import Header from "../components/Header.vue";
 import Search from "../components/Search.vue";
 //import ExploreLite from "../components/ExploreLite.vue"; 
+import GameList from "../components/Game.vue";
 import OtherList from "../components/OtherList.vue";
 import { ref } from "vue";
 import CarouselWithDetail from '../components/CarouselWithDetail.vue'
@@ -30,7 +31,7 @@ const activeName = ref("second");
 body {
   min-height: 100vh;
   /* 动态背景渐变 */
-  background: linear-gradient(135deg, #d403e1 0%, #00465a 30%, #2360b3 70%, #460071 100%);
+  background: linear-gradient(135deg, #d403e1 0%, #00465a 30%, #2360b3 70%, #6f3692 100%);
   background-size: 400% 400%;
   animation: gradient 15s ease infinite;
 }
