@@ -94,20 +94,8 @@ const userMenu = computed(() => [
           </template>
         </el-dropdown>
       </template>
-      <template v-else>
-        <el-button
-          type="primary"
-          class="nav-btn"
-          round
-          @click="pop.changeLoginPop(true)"
-        >
-          <span v-show="!isCollapsed">登录</span>
-          <i v-show="isCollapsed" class="el-icon-user"></i>
-        </el-button>
-      </template>
+      <!-- 移除未登录时的登录按钮 -->
     </div>
-    <Login />
-    <Register />
   </div>
 </template>
 
