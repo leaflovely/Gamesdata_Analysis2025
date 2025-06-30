@@ -39,9 +39,9 @@
             },
           },
           ui: {
-            header: {
-              isShow: false,
-            },
+            // header: {
+            //   isShow: false,
+            // },
             footer: {
               expressionText: '你可以随意问我游戏有关的问题哦！',
             },

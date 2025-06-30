@@ -6,8 +6,6 @@ import Search from "../components/Search.vue";
 import OtherList from "../components/OtherList.vue";
 import { ref } from "vue";
 import CarouselWithDetail from '../components/CarouselWithDetail.vue'
-import GameAgent from '../components/game_agent.vue' // 添加导入
-
 const activeName = ref("second");
 </script>
 
@@ -22,12 +20,8 @@ const activeName = ref("second");
         游戏推荐 ———来自我们编辑的精选
       </div>
       <CarouselWithDetail />
-      
-      <!-- 添加 AI 助手组件 -->
-      <div class="agent-section">
-        <h2 class="section-title">游戏助手</h2>
-        <GameAgent />
-      </div>
+
+      <!-- 其它组件 -->
     </div>
   </main>
 </template>
@@ -111,22 +105,6 @@ main {
     color: #6b778c;
     font-size: 32px;
     font-weight: 600;
-  }
-
-  /* 添加助手组件样式 */
-  .agent-section {
-    margin-top: 40px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
-  }
-
-  .section-title {
-    color: #fff;
-    font-size: 28px;
-    margin-bottom: 20px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 }
 </style>
