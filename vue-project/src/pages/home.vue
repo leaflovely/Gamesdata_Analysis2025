@@ -7,12 +7,28 @@ import OtherList from "../components/OtherList.vue";
 import { ref } from "vue";
 import CarouselWithDetail from '../components/CarouselWithDetail.vue'
 import GameAgent from '../components/game_agent.vue' // 添加导入
+import Login from '../components/Login.vue'; // 新增导入
+import Register from '../components/Register.vue'; // 新增导入
+import { popStore } from '../store/pop'; // 新增导入
+import { userStore } from '../store/user'; // 新增导入
 
 const activeName = ref("second");
+const pop = popStore();
+const user = userStore();
 </script>
 
 <template>
   <!-- 首页内容 -->
+  <Login />
+  <Register />
+  <!-- 右上角登录按钮，仅未登录时显示 -->
+  <button
+    v-if="!user.isLogin"
+    class="login-btn-topright"
+    @click="pop.changeLoginPop(true)"
+  >
+    登录
+  </button>
   <Header />
   <div class="custom-gap"></div>
   <main>
@@ -22,7 +38,6 @@ const activeName = ref("second");
         游戏推荐 ———来自我们编辑的精选
       </div>
       <CarouselWithDetail />
-      
       <!-- 添加 AI 助手组件 -->
       <div class="agent-section">
         <h2 class="section-title">游戏助手</h2>
@@ -58,6 +73,29 @@ body {
 .custom-gap {
   height: 32px;
   background: transparent;
+}
+
+/* 右上角登录按钮样式 */
+.login-btn-topright {
+  position: fixed;
+  top: 32px;
+  right: 48px;
+  z-index: 2001;
+  background: linear-gradient(90deg, #1de9b6 0%, #1dc8e9 100%);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 12px 36px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+  outline: none;
+}
+.login-btn-topright:hover {
+  background: linear-gradient(90deg, #1de9b6 0%, #00e0ff 100%);
+  color: #fff;
 }
 
 main {
@@ -128,5 +166,26 @@ main {
     margin-bottom: 20px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
+}
+
+/* 新增：让登录/注册弹窗居中显示 */
+:deep(.el-dialog__wrapper) {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000 !important;
+}
+
+:deep(.el-dialog) {
+  margin: 0 auto !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  position: relative !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 </style>
