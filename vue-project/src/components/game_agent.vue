@@ -38,6 +38,17 @@
               return 'pat_DsElm4hqkseLYOT42eH4DmxOfBKiKMEU0XQV4N440BMOIpwqDIRIe3xCuKqiTodS';
             },
           },
+          ui: {
+            header: {
+              isShow: false,
+            },
+            footer: {
+              expressionText: '你可以随意问我游戏有关的问题哦！',
+            },
+            chatBot: {
+              isNeedFunctionCallMessage:false,
+            }
+          }
         });
   
         // 将聊天组件挂载到容器
