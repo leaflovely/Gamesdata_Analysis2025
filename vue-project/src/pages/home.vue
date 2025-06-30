@@ -81,7 +81,7 @@ body {
   top: 32px;
   right: 48px;
   z-index: 2001;
-  background: linear-gradient(90deg, #1de9b6 0%, #1dc8e9 100%);
+  background: linear-gradient(90deg, #1dc8e9 0%, #2b1de9 100%);
   color: #fff;
   border: none;
   border-radius: 24px;
